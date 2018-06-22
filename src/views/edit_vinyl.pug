@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1 
+  .container
+    form(method="POST", action="/vinyls/edit/"+vinyl._id, enctype="multipart/form-data")
+      form-group
+        label Titre
+        input.form-control(type="text"  id="title" name="title" value=vinyl.title)
+        label Artiste
+        input.form-control(type="text"  id="artist" name="artist" value=vinyl.artist)
+        label Date de sortie
+        input.form-control(type="date" id="release" name="release" value=vinyl.release)
+        label Format
+        select.form-control(type="text" name="format" id="format" value=vinyl.format)
+          option 45 tours
+          option 33 tours
+        label Description  
+        textarea.form-control(type="text" id="description" name="description")= vinyl.description  
+        label Pochette
+        input.form-control-file(type="file"  id="cover" name="cover" value=vinyl.cover) 
+        input.btn.btn-primary.btn-block(type="submit" value="Submit")
+    

@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  .container
+    .jumbotron
+      h1 Add a Vinyl
+  .container
+    form(method="POST", action="/vinyls/add_vinyls", enctype="multipart/form-data")
+      form-group
+        label Titre
+        input.form-control(type="text"  id="title" name="title" placeholder="Entrer un titre")
+        label Artiste
+        input.form-control(type="text"  id="artist" name="artist" placeholder="Entrer un artiste")
+        label Date de sortie
+        input.form-control(type="date" id="release" name="release" placeholder="JJ/MM/AA")
+        label Format
+        select.form-control(type="text" name="format" id="format")
+          option 45 tours
+          option 33 tours
+        label Description
+        textarea.form-control(type="text" id="description" name="description")  
+        label Pochette
+        input.form-control-file(type="file"  id="cover" name="cover")  
+        input.mt-4.btn.btn-primary.btn-block(type="submit" value="Submit")
+        

@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  .container
+    .jumbotron
+      h1 Your Collection
+  .container.row.d-flex.flex-row.justify-content-around.mt-5
+    each vinyl, i in vinyls
+      .card-deck
+        .card.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 20rem;')
+          - var img = vinyl.cover
+          img(src='/uploads/'+ img, alt='Card image cap').card-img-top
+          .card-body
+            h2.card-title= vinyl.title
+          ul.list-group.list-group-flush
+            h3.list-group-item.artist= vinyl.artist
+            li.list-group-item= vinyl.release
+            li.list-group-item= vinyl.format
+          .card-body
+            p.card-text= vinyl.description 
+            a(href="/vinyls/"+vinyl._id).btn.btn-primary Details
+          
+
+  //- h1 #{title}
+  //- //- #{title} renvoie la valeur de la clé contenu dans l'objet du res.render ('home') contenu dans index.js
+  //- //- 
+  //- ul
+  //-   each article, i in articles
+  //-     li= article.title
+  //-     li= article.author
+  //-     li= article.body  
+  //- 
+  //-     //- ici on va looper dans l'array articles avec un each. Cela va nous permettre d'afficher pour chaque article contenu dans l'array article les valeurs demandées
+  //- 
