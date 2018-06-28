@@ -12,13 +12,14 @@ block content
           img(src='/uploads/'+ img, alt='Card image cap').card-img-top
           .card-body
             h2.card-title= vinyl.title
-          ul.list-group.list-group-flush
-            h3.list-group-item.artist= vinyl.artist
-            li.list-group-item= vinyl.release
-            li.list-group-item= vinyl.format
-          .card-body
-            p.card-text= vinyl.description 
-            a(href="/vinyls/"+vinyl._id).btn.btn-primary Details
+          //- ul.list-group.list-group-flush
+          //-   h3.list-group-item.artist= vinyl.artist
+          //-   li.list-group-item= vinyl.release
+          //-   li.list-group-item= vinyl.format
+          //- .card-body
+          //-   p.card-text= vinyl.description 
+          
+          a(href="/vinyls/"+vinyl._id).btn.btn-primary Details
           
 
   //- h1 #{title}

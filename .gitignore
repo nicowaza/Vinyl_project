@@ -1,1 +1,4 @@
 node_modules/
+public/uploads
+build/main.js
+public/img

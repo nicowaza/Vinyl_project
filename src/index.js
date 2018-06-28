@@ -9,8 +9,12 @@ import flash from 'connect-flash'
 import session from 'express-session'
 import { vinylRouter } from './routes/vinyls'
 import { userRouter } from './routes/users'
+import { User } from './models/user'
 import mongoose from 'mongoose'
 import path from 'path'
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy;
+import bcrypt from 'bcryptjs'
 
 
 
@@ -22,7 +26,7 @@ const options = {
 
 mongoose.connect(url, options)
 let db=mongoose.connection
-// check Db connection
+// check Db connect;'ion
 mongoose.connection.on('connected', () =>
 console.log('[MongoDB] is running on port 27017')
 )
@@ -53,6 +57,46 @@ app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
 });
+
+// Passport config
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.get('*', (req, res, next) => {
+  res.locals.user = req.user || null
+  next()
+}) /*set une variable globale user que l'on pourra utiliser dans tous le projet*/
+/*next() apl le prochain middleware*/
+
+passport.serializeUser((user,done) => {
+  done(null, user.id)
+})
+passport.deserializeUser((id,done) => {
+  User.findById(id,(err,user) => {
+    done(err,user)
+  })
+})
+
+passport.use(new LocalStrategy(
+  function(username, password, done){
+    User.findOne({ username: username },/*ce qu'on veut comparer*/ function(err, user){
+      if(err) { return done(err); }
+      if(!user){
+        return done(null, false, { message: 'No user found.' });
+      }
+
+
+      // Match password
+      bcrypt.compare(password, user.password, function(err, isMatch) {
+        if(err) throw err
+        if(isMatch){
+          return done(null, user)
+        } else {
+            return done(null, false, { message: 'Wrong password' });
+        }
+      })
+    })
+  }))
 
 
 app.set('views', path.join(__dirname, 'views'))

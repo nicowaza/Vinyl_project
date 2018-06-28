@@ -11,25 +11,29 @@ html
           span.navbar-toggler-icon
         #navbarSupportedContent.collapse.navbar-collapse
           ul.navbar-nav.mr-auto
-            li.nav-item
-              a.nav-link(href='/vinyls')
-                | Your collection 
-                span.sr-only (current)
-            li.nav-item
-              a.nav-link(href='/vinyls/add_vinyls') Add Vinyl
+            if user
+              li.nav-item
+                a.nav-link(href='/vinyls')
+                  | Your collection 
+                  span.sr-only (current)
+              li.nav-item
+                a.nav-link(href='/vinyls/add_vinyls') Add Vinyl
           ul.navbar-nav.ml-auto
-            li
-              a.nav-link(href='/users/register') Register
-            li
-              a.nav-link(href='/users/login') Login
-            li 
-              a.nav-link(href='/users/logout') Logout       
+            if user
+              li 
+                a.nav-link(href='/users/logout') Logout  
+            else 
+              li
+                a.nav-link(href='/users/register') Register
+              li
+                a.nav-link(href='/users/login') Login
+               
       
             
 
 
     .container
-      != messages('my_message_template', locals)
+      != messages('message', locals)
       block content
       br
       br

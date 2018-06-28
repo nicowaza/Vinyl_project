@@ -3,12 +3,13 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const VinylSchema = new Schema({
-  title       : {type: String, index: true},
+  title       : {type: String},
   artist      : {type: String, index: true},
   release     : {type: String},
   format      : {type: String},
   description : {type: String},
-  cover       : {type: String}
+  cover       : {type: String},
+  author      : {type: String}
 
 })
 

@@ -5,7 +5,7 @@ block content
     .jumbotron
       h1 Single Vinyl Page
   .container.row.d-flex.flex-row.justify-content-around.mt-5
-    .card.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 20rem;')
+    .card.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 25rem;')
       - var img = vinyl.cover
       img(src='/uploads/'+ img, alt='Card image cap').card-img-top
       .card-body
@@ -16,5 +16,11 @@ block content
         li.list-group-item= vinyl.format
       .card-body
         p.card-text= vinyl.description
-  a.btn.btn-primary.btn-block.mx-auto(role="button" style='width: 8rem' href="/vinyls/edit/"+vinyl._id) Edit Vinyl 
-  a.btn.btn-danger.btn-block.mx-auto.delete-vinyl(role="button" style='width: 8rem' href="/vinyls/edit/"+vinyl._id) Delete
+        .card-footer.text-muted Published by #{author}
+  if user
+    if user.id ==vinyl.author    
+      a.btn.btn-primary.btn-block.mx-auto(role="button" style='width: 8rem' href="/vinyls/edit/"+vinyl._id) Edit Vinyl 
+      //- a.btn.btn-danger.btn-block.mx-auto.delete-vinyl(role="button" style='width: 8rem' href="/vinyls/delete/"+vinyl._id) Delete
+      br
+      form(method='post', action="/vinyls/delete/"+vinyl._id,)
+        input.btn.btn-danger.btn-block.mx-auto(type="submit", value="delete" style='width: 8rem')
