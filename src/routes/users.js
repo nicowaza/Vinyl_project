@@ -46,7 +46,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
       } else {
         console.log(user)
         req.session.userId = user._id
-        req.flash('success', 'User created') /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+        req.flash('success', `'User ${user.username} created'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
         res.redirect('/users/login')
       }
     })
@@ -60,7 +60,7 @@ userRouter.get("/register", (req, res) => {
 // login process
 userRouter.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/vinyls',
+    successRedirect: '/vinyls/user',
     failureRedirect: '/users/login',
     failureFlash: true
   })(req, res, next)

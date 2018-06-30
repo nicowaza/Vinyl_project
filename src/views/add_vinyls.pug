@@ -2,8 +2,7 @@ extends layout
 
 block content
   .container
-    .jumbotron
-      h1 Add a Vinyl
+    h1.singlepage-title [`Add a vinyl to your collection, #{user.username}`] 
   .container
     form(method="POST", action="/vinyls/add_vinyls", enctype="multipart/form-data")
       form-group

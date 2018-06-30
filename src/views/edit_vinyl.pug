@@ -1,9 +1,11 @@
 extends layout
 
 block content
-  h1 
   .container
-    form(method="POST", action="/vinyls/edit/"+vinyl._id, enctype="multipart/form-data")
+    h1.singlepage-title [Edit this vinyl] 
+    h2 Edit this Vinyl  
+  .container
+    form(method="POST", action="/vinyls/user/edit/"+vinyl._id, enctype="multipart/form-data")
       form-group
         label Titre
         input.form-control(type="text"  id="title" name="title" value=vinyl.title)

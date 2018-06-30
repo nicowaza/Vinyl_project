@@ -2,8 +2,7 @@ extends layout
 
 block content
   .container
-    .jumbotron
-      h1 Single Vinyl Page
+    h1.singlepage-title [`Hey #{user.username} !`] 
   .container.row.d-flex.flex-row.justify-content-around.mt-5
     .card.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 25rem;')
       - var img = vinyl.cover

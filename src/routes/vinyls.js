@@ -64,11 +64,11 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
   vinyl.save( (err, vinyl) => {
   if(err){
     req.flash('danger', 'Oops something went wrong')
-    res.redirect('/vinyls')
+    res.redirect('/add_vinyls')
   } else {
     console.log(vinyl)
-    req.flash('success', 'Vinyl added') /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-    res.redirect('/vinyls')
+    req.flash('success', `'${vinyl.title} added'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+    res.redirect('/vinyls/user')
   }
   })
 })
@@ -80,7 +80,7 @@ vinylRouter.get('/add_vinyls', ensureAuthenticated, (req, res) => {
 
 
 // Single Item route client
-vinylRouter.get('/:id', (req, res) => {
+vinylRouter.get('/user/:id', (req, res) => {
   Vinyl.findById(req.params.id, (err, vinyl) => {
     User.findById(vinyl.author, (err, user) => { /*on rapl ici le user par son Id pour pouvoir display le user.name comme celui ayant enregistré l'entrée (le vinyl) dans la base de données*/
       if(err){
@@ -100,7 +100,7 @@ vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Vinyl.findById(req.params.id, (err, vinyl) => {
     if(vinyl.author != req.user._id){
       req.flash('danger', 'Not Authorized')
-      return res.redirect('/vinyls') /*ici il faut placer un return devant le res.redirect sinon l'api plante cf comment part 11 traversy Node.js from scratch*/
+      return res.redirect('/vinyls/user') /*ici il faut placer un return devant le res.redirect sinon l'api plante cf comment part 11 traversy Node.js from scratch*/
     }
     res.render('edit_vinyl', {
       vinyl:vinyl
@@ -127,7 +127,7 @@ if(req.file){
     console.log(err)
   } else {
     req.flash('success', 'Vinyl updated')
-    res.redirect('/vinyls')
+    res.redirect('/vinyls/user')
   }
   })
 })
@@ -140,14 +140,26 @@ vinylRouter.post('/delete/:id', (req, res) => {
 
     } else {
       req.flash('success', 'Vinyl deleted')
-      res.redirect('/vinyls')
+      res.redirect('/vinyls/user')
     }
     })
 })
-// User collection route
-/*cette route est en fait /vinyls*/
+
+// route User Collection
+vinylRouter.get('/user', ensureAuthenticated, (req, res) => {
+  Vinyl.find({author: req.user._id}, (err, userVinyls) => {
+    console.log(userVinyls)
+    res.render('profil', {
+      vinyls:userVinyls
+    });
+  })
+})
+
+// route All Users Collections
+// route User Collection
 vinylRouter.get('/', ensureAuthenticated, (req, res) => {
   Vinyl.find({}, (err, allVinyls) => {
+    console.log(allVinyls)
     res.render('profil', {
       vinyls:allVinyls
     });

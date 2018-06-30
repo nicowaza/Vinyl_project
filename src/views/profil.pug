@@ -2,16 +2,15 @@ extends layout
 
 block content
   .container
-    .jumbotron
-      h1 Your Collection
+    h1.singlepage-title [`Welcome #{user.username} !`]
   .container.row.d-flex.flex-row.justify-content-around.mt-5
     each vinyl, i in vinyls
       .card-deck
-        .card.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 20rem;')
+        .card.card-overlay.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 20rem;')
           - var img = vinyl.cover
           img(src='/uploads/'+ img, alt='Card image cap').card-img-top
-          .card-body
-            h2.card-title= vinyl.title
+          .card-body.card-title-overlay
+            a(href="/vinyls/user/"+vinyl._id).card-title= vinyl.title
           //- ul.list-group.list-group-flush
           //-   h3.list-group-item.artist= vinyl.artist
           //-   li.list-group-item= vinyl.release
@@ -19,8 +18,7 @@ block content
           //- .card-body
           //-   p.card-text= vinyl.description 
           
-          a(href="/vinyls/"+vinyl._id).btn.btn-primary Details
-          
+          //- a(href="/vinyls/user/"+vinyl._id).btn.btn-primary Details
 
   //- h1 #{title}
   //- //- #{title} renvoie la valeur de la clé contenu dans l'objet du res.render ('home') contenu dans index.js

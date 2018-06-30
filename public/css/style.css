@@ -1,16 +1,104 @@
 body {
+  height: 100vh;
   background-image: url('/img/vinyl.jpg');
   background-size: cover;
   background-position: center;
-  /* background-repeat: no-repeat; */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
 }
 
+nav {
+  background-color: rgba(45, 46, 46, 0.5);
+}
+
+.nav-link, .navbar-brand{
+  font-family: 'Sounds Eroded';
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #E30202;
+}
+
+a:hover {
+  color: #961010;
+}
+
+.card-title-overlay a{
+display: block;
+margin-top: 6rem;
+color: #E30202;
+font-family: 'Sounds Eroded';
+font-size: 1.8em;
+text-decoration: none;
+}
+
+.card-overlay{
+  position: relative;
+  display:block;
+}
+
+.card-title-overlay{
+  position: absolute;
+  top: 0;
+  left:0;
+  width: 19rem;
+  height: 19rem;
+  color: black;
+  background-color:rgba(255,255,255,0.8);
+  text-align: center;
+  z-index: 10;
+  opacity: 0;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  }
+
+  .card-title-overlay:hover {
+      opacity:1;
+  }
+
+
+  .card-overlay img {
+      z-index:1;
+  }
+
+.navbar-brand{
+  font-size: 1.5rem;
+}
+
+.jumbotron {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: rgba(45, 46, 46, 0.5);
+}
 
 .jumbotron h1, h2 {
   text-align: center;
 }
 
+.singlepage-title {
+  color: #E30202;
+  margin-top: 3%;
+  text-align: center;
+  font-family: 'The Juke Box';
+  font-size: 6vw;
+}
+.container-home{
+  height: 60vh;
+}
+.homepage-title{
+  color: #E30202;
+  margin-top: 20%;
+  align-content: center;
+  text-align: center;
+  font-family: 'The Juke Box';
+  font-size: 10vw;
+}
+.container-home{
+  margin-top: 20%;
+}
 .alert-error {
   color: #a94442;
   background-color: #f2dede;
