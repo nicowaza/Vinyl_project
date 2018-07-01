@@ -1,5 +1,5 @@
 import express from 'express'
-const { SERVER_PORT, DBUrl } = process.env
+const { SERVER_PORT, DBUrl } = process.env || 8080
 const app = express()
 import bodyParser from 'body-parser'
 import "dotenv/config"
@@ -49,6 +49,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: true,
+  cookie: { secure: true }
 }))
 
 //express messages middleware
