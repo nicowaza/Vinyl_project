@@ -381,7 +381,8 @@ app.set('trust proxy', 1); // trust first proxy
 app.use(__WEBPACK_IMPORTED_MODULE_6_express_session___default()({
   secret: 'keyboard cat',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: true }
 }));
 
 //express messages middleware
@@ -482,7 +483,7 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 
-app.listen(SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`));
+app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`));
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src"))
 
 /***/ }),
