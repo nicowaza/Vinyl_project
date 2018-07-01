@@ -109,7 +109,7 @@ vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
 });
 
 // Update Single Vinyl
-vinylRouter.post('/edit/:id', upload.single('cover'), (req, res) => {
+vinylRouter.post('/user/edit/:id', upload.single('cover'), (req, res) => {
 
   let vinyl = req.body
 
@@ -132,7 +132,7 @@ if(req.file){
   })
 })
 
-vinylRouter.post('/delete/:id', (req, res) => {
+vinylRouter.post('/user/delete/:id', (req, res) => {
 
   Vinyl.remove({_id:req.params.id}, (err) => {
     if(err){
