@@ -1,5 +1,5 @@
 import express from 'express'
-const { SERVER_PORT, DBUrl } = process.env || 8080
+const { SERVER_PORT, DBUrl } = process.env
 const app = express()
 import bodyParser from 'body-parser'
 import "dotenv/config"
@@ -151,4 +151,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 
-app.listen(SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`))
+app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`))
