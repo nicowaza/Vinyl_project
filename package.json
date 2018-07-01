@@ -4,7 +4,7 @@
   "description": "exos intro express routes",
   "main": "index.js",
   "scripts": {
-    "start": "backpack"
+    "start": "node index.js"
   },
   "keywords": [
     "node",
