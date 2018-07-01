@@ -21,5 +21,5 @@ block content
       a.btn.btn-primary.btn-block.mx-auto(role="button" style='width: 8rem' href="/vinyls/edit/"+vinyl._id) Edit Vinyl 
       //- a.btn.btn-danger.btn-block.mx-auto.delete-vinyl(role="button" style='width: 8rem' href="/vinyls/delete/"+vinyl._id) Delete
       br
-      form(method='post', action="/vinyls/delete/"+vinyl._id,)
+      form(method='post', action="/vinyls/user/delete/"+vinyl._id,)
         input.btn.btn-danger.btn-block.mx-auto(type="submit", value="delete" style='width: 8rem')
