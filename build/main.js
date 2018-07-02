@@ -482,7 +482,7 @@ app.get('/', (req, res) => {
 //   const friends = ["tony", "miranda", "jojo", "pierre", "basil"]
 //   res.render('friends', {friends: friends});
 // })
-
+console.log(process.env.PORT);
 app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`));
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src"))
 
@@ -631,7 +631,7 @@ vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
 });
 
 // Update Single Vinyl
-vinylRouter.post('/edit/:id', upload.single('cover'), (req, res) => {
+vinylRouter.post('/user/edit/:id', upload.single('cover'), (req, res) => {
 
   let vinyl = req.body;
 
@@ -654,7 +654,7 @@ vinylRouter.post('/edit/:id', upload.single('cover'), (req, res) => {
   });
 });
 
-vinylRouter.post('/delete/:id', (req, res) => {
+vinylRouter.post('/user/delete/:id', (req, res) => {
 
   __WEBPACK_IMPORTED_MODULE_1__models_vinyl__["a" /* Vinyl */].remove({ _id: req.params.id }, err => {
     if (err) {

@@ -150,5 +150,5 @@ app.get('/', (req, res) => {
 //   const friends = ["tony", "miranda", "jojo", "pierre", "basil"]
 //   res.render('friends', {friends: friends});
 // })
-
+console.log(process.env.PORT)
 app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`))
