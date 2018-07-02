@@ -13,6 +13,8 @@ html
           ul.navbar-nav.mr-auto
             if user
               li.nav-item
+                a.nav-link(href='/vinyls/' style='color: #E30202') Every Collections
+              li.nav-item
                 a.nav-link(href='/vinyls/user' style='color: #E30202') #{user.username}'s Collection 
                   span.sr-only (current)
               li.nav-item
