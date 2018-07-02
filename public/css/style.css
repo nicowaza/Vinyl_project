@@ -1,6 +1,6 @@
 body {
   height: 100vh;
-  background-image: url('/img/vinyl.jpg');
+  background-image: url('/public/img/vinyl.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
