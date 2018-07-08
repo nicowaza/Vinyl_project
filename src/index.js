@@ -152,4 +152,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT)
-app.listen(process.env.PORT /*|| SERVER_PORT*/, () => console.log(`[Express] is running on ${PORT}`))
+app.listen(process.env.PORT /*|| SERVER_PORT*/, () => console.log("Express is running on heroku"/*`[Express] is running on ${process.env.PORT}`*/))
