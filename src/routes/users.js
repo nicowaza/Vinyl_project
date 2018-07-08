@@ -3,6 +3,7 @@ const userRouter = express.Router()
 import mongoose from 'mongoose'
 import { User } from '../models/user'
 import multer from 'multer'
+import cloudinary from 'cloudinary'
 import path from 'path'
 import passport from 'passport'
 import expressValidator from 'express-validator'
