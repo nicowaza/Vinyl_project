@@ -47,7 +47,7 @@ cloudinary.config({
 })
 
 // register process
-userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
+userRouter.post("/register", upload.single('avatar'), (req, res, next) => { cloudinary.uploader.upload(req.file.path,
   (result) => {
     let user = new User()
     user.name = req.body.name
@@ -60,7 +60,6 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
         else{
           user.avatar="no avatar"
         }
-        console.log(user)
   })
 
   user.save((err, user) => {
