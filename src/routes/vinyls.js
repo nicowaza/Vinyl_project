@@ -89,14 +89,14 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
     // datas['cover'] = req.file
 
   vinyl.save((err, vinyl) => {
-  if(err){
-    req.flash('danger', 'Oops something went wrong')
-    res.redirect('/add_vinyls')
-  } else {
-    console.log(vinyl)
-    req.flash('success', `'${vinyl.title} added'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-    res.redirect('/vinyls/user')
-  }
+    if(err){
+      req.flash('danger', 'Oops something went wrong')
+      res.redirect('/add_vinyls')
+    } else {
+      console.log(vinyl)
+      req.flash('success', `'${vinyl.title} added'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+      res.redirect('/vinyls/user')
+    }
   })
 })
 // display add_vinyl route
