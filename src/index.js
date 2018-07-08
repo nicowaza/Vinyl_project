@@ -27,7 +27,7 @@ const options = {
 
 mongoose.connect(process.env.url /*|| 'mongodb://localhost/vinyls_db'*/, options)
 let db=mongoose.connection
-// check Db connect;'ion
+// check Db connection
 mongoose.connection.on('connected', () =>
 console.log('[MongoDB] is running on port 27017')
 )

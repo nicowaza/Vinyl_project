@@ -68,7 +68,7 @@ function ensureAuthenticated(req, res, next){
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
   cloudinary.uploader.upload(req.file.path, function(result) {
   console.log(req.body)
-  console.log(req.file)
+  console.log(req.file.path)
 
   let vinyl = new Vinyl()
   vinyl.title = req.body.title

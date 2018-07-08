@@ -12,31 +12,52 @@ import bcrypt from 'bcryptjs'
 
 
 import bodyParser from 'body-parser'
-//création de l'espace de storage pour les files uploaded dans les formulaires add et edit
+//MULTER SET UP
+// storage
 const storage = multer.diskStorage({
   destination : (req, file, cb) => {
-    cb(null, './public/uploads/users')
+    cb(null, './public/uploads/')
   },
   filename : (req, file, cb) => {
-    cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
+    cb(null, Date.now() + '-' + file.originalname)
   }
 })
 
-const upload = multer({
-  storage: storage})
+// filtre
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
 
+// multer upload setup
+const upload = multer({
+  storage: storage,
+  fileFilter: imageFilter
+}) /*on récupère la variable storage qui défini l'espace de stockage et on utilise la variable imageFilter pour ne prendre que des images en upload*/
+
+// CLOUDINARY SETUP
+cloudinary.config({
+  cloud_name: 'nicowaza',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 // register process
 userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
-  let user = new User(req.body)
+  cloudinary.uploader.upload(req.file.path, function(result) {
+    let user = new User(req.body)
 
-    if(req.file){
-      console.log('uploading')
-      user.avatar=req.file.filename
-    }
-      else{
-        user.avatar="no avatar"
+      if(req.file){
+          vinyl.cover= result.secure_url
       }
+        else{
+          user.avatar="no avatar"
+        }
+
+  }
 
     user.save((err, user) => {
       if(err){
