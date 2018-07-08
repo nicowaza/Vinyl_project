@@ -52,7 +52,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
     let user = new User(req.body)
 
       if(req.file){
-          vinyl.cover= result.secure_url
+          user.avatar= result.secure_url
       }
         else{
           user.avatar="no avatar"

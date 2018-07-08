@@ -88,7 +88,7 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
     // const datas = req.body
     // datas['cover'] = req.file
 
-  vinyl.save( (err, vinyl) => {
+  vinyl.save((err, vinyl) => {
   if(err){
     req.flash('danger', 'Oops something went wrong')
     res.redirect('/add_vinyls')
