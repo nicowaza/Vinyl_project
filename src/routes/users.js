@@ -54,13 +54,9 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => { clou
     user.username = req.body.username
     user.email = req.body.email
     user.password = req.body.password
-      if(req.file){
-          user.avatar= result.secure_url
-          user.avatarId= result.public_id
-      }
-        else{
-          user.avatar="no avatar"
-        }
+    user.avatar= result.secure_url
+    user.avatarId= result.public_id
+
   })
 
   user.save((err, user) => {
