@@ -208,7 +208,7 @@ const userRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 
 
-const { check, validationResult } = __webpack_require__(18);
+const { check, validationResult } = __webpack_require__(19);
 
 
 
@@ -351,16 +351,17 @@ const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 
 const passport = __webpack_require__(10);
-const LocalStrategy = __webpack_require__(19).Strategy;
+const LocalStrategy = __webpack_require__(20).Strategy;
 
 
 const url = DBUrl;
+// const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise
   // useMongoClient: true
 };
 
-__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(url, options);
+__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(process.env.url || 'mongodb://localhost/vinyls_db', options);
 let db = __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection;
 // check Db connect;'ion
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
@@ -388,7 +389,7 @@ app.use(__WEBPACK_IMPORTED_MODULE_6_express_session___default()({
 //express messages middleware
 app.use(__webpack_require__(7)());
 app.use(function (req, res, next) {
-  res.locals.messages = __webpack_require__(20)(req, res);
+  res.locals.messages = __webpack_require__(21)(req, res);
   next();
 });
 
@@ -516,11 +517,13 @@ module.exports = require("express-session");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_user__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_multer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_path__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_path__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__users__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_body_parser__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_body_parser__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_cloudinary__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_path__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__users__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_body_parser__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_body_parser__);
 
 const vinylRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
@@ -530,7 +533,11 @@ const vinylRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 
 
+
 //création de l'espace de storage pour les files uploaded dans les formulaires add et edit
+
+//MULTER SET UP
+// storage
 const storage = __WEBPACK_IMPORTED_MODULE_3_multer___default.a.diskStorage({
   destination: (req, file, cb) => {
     cb(null, './public/uploads/');
@@ -540,8 +547,20 @@ const storage = __WEBPACK_IMPORTED_MODULE_3_multer___default.a.diskStorage({
   }
 });
 
+// filtre
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+// multer upload setup
 const upload = __WEBPACK_IMPORTED_MODULE_3_multer___default()({
-  storage: storage }); /*on récupère la variable storage qui défini l'espace de stockage*/
+  storage: storage,
+  fileFilter: imageFilter
+}); /*on récupère la variable storage qui défini l'espace de stockage et on utilise la variable imageFilter pour ne prendre que des images en upload*/
 
 //on crée un Router pour toutes les routes ayant a trait aux vinyls
 
@@ -552,6 +571,13 @@ const upload = __WEBPACK_IMPORTED_MODULE_3_multer___default()({
 // //   })
 // // }
 // Acces Control
+// CLOUDINARY SETUP
+__WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.config({
+  cloud_name: 'nicowaza',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -563,22 +589,23 @@ function ensureAuthenticated(req, res, next) {
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
+  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.uploader.upload(req.file.path, function (result) {
+    console.log(req.body);
+    console.log(req.file);
 
-  let vinyl = new __WEBPACK_IMPORTED_MODULE_1__models_vinyl__["a" /* Vinyl */]();
-  vinyl.title = req.body.title;
-  vinyl.artist = req.body.artist;
-  vinyl.release = req.body.release;
-  vinyl.format = req.body.format;
-  vinyl.description = req.body.description;
-  vinyl.author = req.user._id; /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
-  if (req.file) {
-    vinyl.cover = req.file.filename;
-  } else {
-    vinyl.cover = "no cover";
-  }
-
+    let vinyl = new __WEBPACK_IMPORTED_MODULE_1__models_vinyl__["a" /* Vinyl */]();
+    vinyl.title = req.body.title;
+    vinyl.artist = req.body.artist;
+    vinyl.release = req.body.release;
+    vinyl.format = req.body.format;
+    vinyl.description = req.body.description;
+    vinyl.author = req.user._id; /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
+    if (req.file) {
+      vinyl.cover = result.secure_url;
+    } else {
+      vinyl.cover = "no cover";
+    }
+  });
   //AUTRE METHODE
   // const datas = req.body
   // datas['cover'] = req.file
@@ -722,16 +749,22 @@ const Vinyl = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model("Vinyl", Vi
 /* 18 */
 /***/ (function(module, exports) {
 
-module.exports = require("express-validator/check");
+module.exports = require("cloudinary");
 
 /***/ }),
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = require("passport-local");
+module.exports = require("express-validator/check");
 
 /***/ }),
 /* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("passport-local");
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-messages");

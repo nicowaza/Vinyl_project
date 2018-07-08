@@ -3,11 +3,15 @@ const vinylRouter = express.Router();
 import { Vinyl } from '../models/vinyl'
 import { User } from '../models/user'
 import multer from 'multer'
+import cloudinary from 'cloudinary'
 import path from 'path'
 import { userRouter } from './users'
 
 import bodyParser from 'body-parser'
 //création de l'espace de storage pour les files uploaded dans les formulaires add et edit
+
+//MULTER SET UP
+// storage
 const storage = multer.diskStorage({
   destination : (req, file, cb) => {
     cb(null, './public/uploads/')
@@ -17,8 +21,20 @@ const storage = multer.diskStorage({
   }
 })
 
+// filtre
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+// multer upload setup
 const upload = multer({
-  storage: storage}) /*on récupère la variable storage qui défini l'espace de stockage*/
+  storage: storage,
+  fileFilter: imageFilter
+}) /*on récupère la variable storage qui défini l'espace de stockage et on utilise la variable imageFilter pour ne prendre que des images en upload*/
 
 //on crée un Router pour toutes les routes ayant a trait aux vinyls
 
@@ -29,6 +45,16 @@ const upload = multer({
 // //   })
 // // }
 // Acces Control
+// CLOUDINARY SETUP
+cloudinary.config({
+  cloud_name: 'nicowaza',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
+
+
+
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){
     return next()
@@ -40,6 +66,7 @@ function ensureAuthenticated(req, res, next){
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
+  cloudinary.uploader.upload(req.file.path, function(result) {
   console.log(req.body)
   console.log(req.file)
 
@@ -51,13 +78,13 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
   vinyl.description = req.body.description
   vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
   if(req.file){
-    vinyl.cover=req.file.filename
+    vinyl.cover= result.secure_url
   }
     else{
       vinyl.cover="no cover"
     }
-
-    //AUTRE METHODE
+})
+   //AUTRE METHODE
     // const datas = req.body
     // datas['cover'] = req.file
 

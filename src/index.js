@@ -19,12 +19,13 @@ import bcrypt from 'bcryptjs'
 
 
 const url = DBUrl
+// const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise,
   // useMongoClient: true
 }
 
-mongoose.connect(url, options)
+mongoose.connect(process.env.url || 'mongodb://localhost/vinyls_db', options)
 let db=mongoose.connection
 // check Db connect;'ion
 mongoose.connection.on('connected', () =>
