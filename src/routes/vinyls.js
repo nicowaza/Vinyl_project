@@ -66,7 +66,7 @@ function ensureAuthenticated(req, res, next){
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  cloudinary.uploader.upload(req.file.path, (result) => {
+  cloudinary.v2.uploader.upload(req.file.path, (result) => {
   console.log(req.body)
   console.log(req.file.path)
 
@@ -79,6 +79,7 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
   vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
   if(req.file){
     vinyl.cover= result.secure_url
+    vinyl.coverId= result.public_id
   }
     else{
       vinyl.cover="no cover"

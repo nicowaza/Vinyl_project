@@ -47,7 +47,7 @@ cloudinary.config({
 })
 
 // register process
-userRouter.post("/register", upload.single('avatar'), (req, res, next) => { cloudinary.uploader.upload(req.file.path,
+userRouter.post("/register", upload.single('avatar'), (req, res, next) => { cloudinary.v2.uploader.upload(req.file.path,
   (result) => {
     let user = new User()
     user.name = req.body.name
@@ -56,6 +56,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => { clou
     user.password = req.body.password
       if(req.file){
           user.avatar= result.secure_url
+          user.avatarId= result.public_id
       }
         else{
           user.avatar="no avatar"

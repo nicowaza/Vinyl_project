@@ -8,6 +8,7 @@ const UserSchema = new Schema({
   username  : { type: String, index: true },
   email     : { type: String },
   password  : { type: String },
+  avatarId  : { type: String },
   avatar    : { type: String }
 })
 
