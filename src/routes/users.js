@@ -37,7 +37,7 @@ const imageFilter = function (req, file, cb) {
 const upload = multer({
   storage: storage,
   fileFilter: imageFilter
-}) /*on récupère la variable storage qui défini l'espace de stockage et on utilise la variable imageFilter pour ne prendre que des images en upload*/
+})
 
 // CLOUDINARY SETUP
 cloudinary.config({
@@ -48,7 +48,7 @@ cloudinary.config({
 
 // register process
 userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
-  cloudinary.uploader.upload(req.file.path, function(result) {
+  (result) => {
     let user = new User()
     user.name = req.body.name
     user.username = req.body.username
@@ -60,9 +60,10 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
         else{
           user.avatar="no avatar"
         }
+        console.log(user)
   })
 
-    user.save((err, user) => {
+  user.save((err, user) => {
       if(err){
         console.log(err)
         req.flash('danger', 'Oops something went wrong')

@@ -66,7 +66,7 @@ function ensureAuthenticated(req, res, next){
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  cloudinary.uploader.upload(req.file.path, function(result) {
+  cloudinary.uploader.upload(req.file.path, (result) => {
   console.log(req.body)
   console.log(req.file.path)
 
