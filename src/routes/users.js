@@ -57,7 +57,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
           user.avatar="no avatar"
         }
 
-  }
+  })
 
     user.save((err, user) => {
       if(err){
