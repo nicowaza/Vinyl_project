@@ -62,7 +62,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -103,6 +103,7 @@ const UserSchema = new Schema({
   username: { type: String, index: true },
   email: { type: String },
   password: { type: String },
+  avatarId: { type: String },
   avatar: { type: String }
 });
 
@@ -179,6 +180,12 @@ module.exports = require("multer");
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("cloudinary");
+
+/***/ }),
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -190,18 +197,21 @@ module.exports = require("multer");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_user__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_multer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_path__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_path__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_passport__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_passport___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_passport__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_express_validator__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_express_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_express_validator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_bcryptjs__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_bcryptjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_bcryptjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_body_parser__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_body_parser__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_cloudinary__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_path__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_passport__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_passport___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_passport__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_express_validator__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_express_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_express_validator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_bcryptjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_bcryptjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_bcryptjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_body_parser__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_body_parser__);
 
 const userRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
+
 
 
 
@@ -212,29 +222,50 @@ const { check, validationResult } = __webpack_require__(19);
 
 
 
-//création de l'espace de storage pour les files uploaded dans les formulaires add et edit
+//MULTER SET UP
+// storage
 const storage = __WEBPACK_IMPORTED_MODULE_3_multer___default.a.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public/uploads/users');
+    cb(null, './public/uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname + '-' + Date.now() + __WEBPACK_IMPORTED_MODULE_4_path___default.a.extname(file.originalname));
+    cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
+// filtre
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+// multer upload setup
 const upload = __WEBPACK_IMPORTED_MODULE_3_multer___default()({
-  storage: storage });
+  storage: storage,
+  fileFilter: imageFilter
+});
+
+// CLOUDINARY SETUP
+__WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.config({
+  cloud_name: 'nicowaza',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // register process
 userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
-  let user = new __WEBPACK_IMPORTED_MODULE_2__models_user__["a" /* User */](req.body);
-
-  if (req.file) {
-    console.log('uploading');
-    user.avatar = req.file.filename;
-  } else {
-    user.avatar = "no avatar";
-  }
+  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, result => {
+    let user = new __WEBPACK_IMPORTED_MODULE_2__models_user__["a" /* User */]();
+    user.name = req.body.name;
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    user.avatar = result.secure_url;
+    user.avatarId = result.public_id;
+  });
 
   user.save((err, user) => {
     if (err) {
@@ -256,7 +287,7 @@ userRouter.get("/register", (req, res) => {
 
 // login process
 userRouter.post('/login', (req, res, next) => {
-  __WEBPACK_IMPORTED_MODULE_5_passport___default.a.authenticate('local', {
+  __WEBPACK_IMPORTED_MODULE_6_passport___default.a.authenticate('local', {
     successRedirect: '/vinyls/user',
     failureRedirect: '/users/login',
     failureFlash: true
@@ -295,20 +326,20 @@ userRouter.get('/logout', (req, res) => {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("passport");
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(13);
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -317,18 +348,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_express__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_body_parser__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_body_parser__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dotenv_config__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dotenv_config__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dotenv_config___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_dotenv_config__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_volleyball__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_volleyball__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_volleyball___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_volleyball__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_express_validator__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_express_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_express_validator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_connect_flash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_connect_flash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_connect_flash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_express_session__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_express_session__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_express_session___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_express_session__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routes_vinyls__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__routes_users__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routes_vinyls__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__routes_users__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__models_user__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_mongoose__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_mongoose__);
@@ -350,12 +381,12 @@ const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 
 
-const passport = __webpack_require__(10);
+const passport = __webpack_require__(11);
 const LocalStrategy = __webpack_require__(20).Strategy;
 
 
 const url = DBUrl;
-// const localUrl = 'mongodb://localhost/vinyls_db'
+const localUrl = 'mongodb://localhost/vinyls_db';
 const options = {
   promiseLibrary: Promise
   // useMongoClient: true
@@ -363,7 +394,7 @@ const options = {
 
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(process.env.url || 'mongodb://localhost/vinyls_db', options);
 let db = __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection;
-// check Db connect;'ion
+// check Db connection
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
 
 //check for Db errors
@@ -484,44 +515,44 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT);
-app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`));
+app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${process.env.PORT}`));
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src"))
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = require("dotenv/config");
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("volleyball");
+module.exports = require("dotenv/config");
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = require("express-session");
+module.exports = require("volleyball");
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return vinylRouter; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_express__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_vinyl__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_vinyl__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_user__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_multer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_multer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cloudinary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_cloudinary__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_path__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__users__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__users__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_body_parser__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_body_parser__);
 
@@ -589,9 +620,9 @@ function ensureAuthenticated(req, res, next) {
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.uploader.upload(req.file.path, function (result) {
+  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, result => {
     console.log(req.body);
-    console.log(req.file);
+    console.log(req.file.path);
 
     let vinyl = new __WEBPACK_IMPORTED_MODULE_1__models_vinyl__["a" /* Vinyl */]();
     vinyl.title = req.body.title;
@@ -600,11 +631,9 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
     vinyl.format = req.body.format;
     vinyl.description = req.body.description;
     vinyl.author = req.user._id; /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
-    if (req.file) {
-      vinyl.cover = result.secure_url;
-    } else {
-      vinyl.cover = "no cover";
-    }
+
+    vinyl.cover = result.secure_url;
+    vinyl.coverId = result.public_id;
   });
   //AUTRE METHODE
   // const datas = req.body
@@ -719,7 +748,7 @@ vinylRouter.get('/', ensureAuthenticated, (req, res) => {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -736,6 +765,7 @@ const VinylSchema = new Schema({
   release: { type: String },
   format: { type: String },
   description: { type: String },
+  coverId: { type: String },
   cover: { type: String },
   author: { type: String }
 
@@ -744,12 +774,6 @@ const VinylSchema = new Schema({
 const Vinyl = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model("Vinyl", VinylSchema);
 
 
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = require("cloudinary");
 
 /***/ }),
 /* 19 */
