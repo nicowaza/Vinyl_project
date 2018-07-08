@@ -19,13 +19,13 @@ import bcrypt from 'bcryptjs'
 
 
 const url = DBUrl
-// const localUrl = 'mongodb://localhost/vinyls_db'
+const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise,
   // useMongoClient: true
 }
 
-mongoose.connect(process.env.url /*|| 'mongodb://localhost/vinyls_db'*/, options)
+mongoose.connect(process.env.url || 'mongodb://localhost/vinyls_db', options)
 let db=mongoose.connection
 // check Db connection
 mongoose.connection.on('connected', () =>
@@ -152,4 +152,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT)
-app.listen(process.env.PORT /*|| SERVER_PORT*/, () => console.log("Express is running on heroku"/*`[Express] is running on ${process.env.PORT}`*/))
+app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${process.env.PORT}`))
