@@ -57,7 +57,6 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => { clou
     user.avatar= result.secure_url
     user.avatarId= result.public_id
 
-  })
 
   user.save((err, user) => {
       if(err){
@@ -70,6 +69,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => { clou
         req.flash('success', `'User ${user.username} created'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
         res.redirect('/users/login')
       }
+      })
     })
   })
 
