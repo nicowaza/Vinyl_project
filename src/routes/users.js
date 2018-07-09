@@ -49,12 +49,13 @@ cloudinary.config({
 // register process
 userRouter.post("/register", upload.single('avatar'), (req, res, next) => { cloudinary.v2.uploader.upload(req.file.path,
   (result) => {
+    let secUrl = result.secure_url
     let user = new User()
     user.name = req.body.name
     user.username = req.body.username
     user.email = req.body.email
     user.password = req.body.password
-    user.avatar= result.secure_url
+    user.avatar= secUrl
     user.avatarId= result.public_id
 
 
