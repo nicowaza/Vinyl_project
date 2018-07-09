@@ -208,7 +208,7 @@ const userRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 
 
-const { check, validationResult } = __webpack_require__(18);
+const { check, validationResult } = __webpack_require__(19);
 
 
 
@@ -351,7 +351,7 @@ const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 
 const passport = __webpack_require__(10);
-const LocalStrategy = __webpack_require__(19).Strategy;
+const LocalStrategy = __webpack_require__(20).Strategy;
 
 
 const url = DBUrl;
@@ -388,7 +388,7 @@ app.use(__WEBPACK_IMPORTED_MODULE_6_express_session___default()({
 //express messages middleware
 app.use(__webpack_require__(7)());
 app.use(function (req, res, next) {
-  res.locals.messages = __webpack_require__(20)(req, res);
+  res.locals.messages = __webpack_require__(21)(req, res);
   next();
 });
 
@@ -719,19 +719,20 @@ const Vinyl = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model("Vinyl", Vi
 
 
 /***/ }),
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-validator/check");
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("passport-local");
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-messages");
