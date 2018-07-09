@@ -33,7 +33,7 @@ console.log('[MongoDB] is running on port 27017')
 
 //check for Db errors
 db.on('error', (err) => {
-  console.log(err)
+  console.log('toto')
 })
 
 

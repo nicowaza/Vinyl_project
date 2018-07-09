@@ -367,7 +367,7 @@ __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () 
 
 //check for Db errors
 db.on('error', err => {
-  console.log(err);
+  console.log('toto');
 });
 
 app.use(__WEBPACK_IMPORTED_MODULE_1_body_parser___default.a.json());
