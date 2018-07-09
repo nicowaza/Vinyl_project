@@ -47,8 +47,9 @@ cloudinary.config({
 })
 
 // register process
-userRouter.post("/register", upload.single('avatar'), (req, res, next) => { cloudinary.v2.uploader.upload(req.file.path,
-  (result) => {
+userRouter.post("/register", upload.single('avatar'), function(req, res, next){ cloudinary.v2.uploader.upload(req.file.path,
+  function(err,result) {
+    if (err) console.log(err)
     let secUrl = result.secure_url
     let user = new User()
     user.name = req.body.name
@@ -59,7 +60,7 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => { clou
     user.avatarId= result.public_id
 
 
-  user.save((err, user) => {
+  user.save(function(err, user){
       if(err){
         console.log(err)
         req.flash('danger', 'Oops something went wrong')
