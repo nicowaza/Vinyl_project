@@ -25,7 +25,7 @@ const options = {
   // useMongoClient: true
 }
 
-mongoose.connect(process.env.url || 'mongodb://localhost/vinyls_db', options)
+mongoose.connect(process.env.url /*|| 'mongodb://localhost/vinyls_db'*/, options)
 let db=mongoose.connection
 // check Db connect;'ion
 mongoose.connection.on('connected', () =>
@@ -152,4 +152,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT)
-app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`))
+app.listen(process.env.PORT /*|| SERVER_PORT*/, () => console.log(`[Express] is running on mLab`))

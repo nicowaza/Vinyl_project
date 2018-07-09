@@ -361,7 +361,7 @@ const options = {
   // useMongoClient: true
 };
 
-__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(process.env.url || 'mongodb://localhost/vinyls_db', options);
+__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(process.env.url /*|| 'mongodb://localhost/vinyls_db'*/, options);
 let db = __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection;
 // check Db connect;'ion
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
@@ -484,7 +484,7 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT);
-app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${SERVER_PORT}`));
+app.listen(process.env.PORT /*|| SERVER_PORT*/, () => console.log(`[Express] is running on mLab`));
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src"))
 
 /***/ }),
