@@ -81,7 +81,7 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
     vinyl.cover= result.secure_url
     vinyl.coverId= result.public_id
 
-})
+
    //AUTRE METHODE
     // const datas = req.body
     // datas['cover'] = req.file
@@ -96,6 +96,7 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
       res.redirect('/vinyls/user')
     }
   })
+})
 })
 // display add_vinyl route
 vinylRouter.get('/add_vinyls', ensureAuthenticated, (req, res) => {
