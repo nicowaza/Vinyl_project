@@ -63,6 +63,7 @@ cloudinary.config({
 })
 
 
+
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), function(req, res, next){
   cloudinary.v2.uploader.upload(req.file.path,
@@ -77,7 +78,7 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), fun
       vinyl.format = req.body.format
       vinyl.description = req.body.description
       vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
-      vinyl.cover = result.secure_url
+      vinyl.cover = secUrl
       vinyl.coverId= result.public_id
 
         console.log(req.body)

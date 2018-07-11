@@ -50,6 +50,7 @@ cloudinary.config({
 userRouter.post("/register", upload.single('avatar'), function(req, res, next){ cloudinary.v2.uploader.upload(req.file.path,
   function(err,result) {
     if (err) console.log(err)
+
     let secUrl = result.secure_url
     let user = new User()
     user.name = req.body.name
