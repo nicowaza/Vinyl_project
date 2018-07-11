@@ -10,6 +10,16 @@ import { userRouter } from './users'
 import bodyParser from 'body-parser'
 //création de l'espace de storage pour les files uploaded dans les formulaires add et edit
 
+
+
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    return next()
+  } else {
+    req.flash('danger', 'Please login')
+    res.redirect('/users/login')
+  }
+}
 //MULTER SET UP
 // storage
 const storage = multer.diskStorage({
@@ -53,36 +63,25 @@ cloudinary.config({
 })
 
 
-
-
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()){
-    return next()
-  } else {
-    req.flash('danger', 'Please login')
-    res.redirect('/users/login')
-  }
-}
-
 //Add submit POST route
-vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  let vinyl = new Vinyl()
-  vinyl.title = req.body.title
-  vinyl.artist = req.body.artist
-  vinyl.release = req.body.release
-  vinyl.format = req.body.format
-  vinyl.description = req.body.description
-  vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
-  vinyl.cover = req.file.filename
-  console.log(req.body)
-  console.log(req.file.path)
+vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), function(req, res, next){
+  cloudinary.v2.uploader.upload(req.file.path,
+    function(err,result) {
+      if (err) console.log(err)
+      let secUrl = result.secure_url
 
-  cloudinary.v2.uploader.upload(req.file.path, (result) => {
+      let vinyl = new Vinyl()
+      vinyl.title = req.body.title
+      vinyl.artist = req.body.artist
+      vinyl.release = req.body.release
+      vinyl.format = req.body.format
+      vinyl.description = req.body.description
+      vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
+      vinyl.cover = result.secure_url
+      vinyl.coverId= result.public_id
 
-    req.body.cover= result.secure_url
-    req.body.coverId= result.public_id
-
-
+        console.log(req.body)
+        console.log(req.file.path)
    //AUTRE METHODE
     // const datas = req.body
     // datas['cover'] = req.file
