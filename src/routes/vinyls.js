@@ -135,18 +135,31 @@ vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
 });
 
 // Update Single Vinyl
-vinylRouter.post('/user/edit/:id', upload.single('cover'), (req, res) => {
+vinylRouter.post('/user/edit/:id', upload.single('cover'),function (req, res){
 
-  let vinyl = req.body
+let vinyl = req.body
+let query = {_id:req.params.id}
+  if(req.file){
+    vinyl.findById(req.params.id, function(err, vinyl){
+      if(err){
+        req.flash('danger', 'Oops something went wrong')
+        return res.redirect('edit_vinyl')
+      }
+      cloudinary.v2.uploader.destroy(vinyl.cover_id, function(err, result){
+        if(err){
+          req.flash('danger', 'Oops something went wrong')
+          return res.redirect('edit_vinyl')
+        }
+        cloudinary.v2.uploader.upload(req.file.path,
+          function(err,result) {
+            if (err) console.log(err)
 
-if(req.file){
- vinyl.cover=req.file.filename
-}
- else{
-   vinyl.cover="no cover"
- }
+              let secUrl = result.secure_url
+              vinyl.cover = result.secure_url
+              vinyl.coverId= result.public_id
+      })
 
-  let query = {_id:req.params.id};
+    })
 
   Vinyl.update(query, vinyl, (err) => { /*ici on update le modèle du vinyl au lieu de sauver un objet*/
   if(err){
