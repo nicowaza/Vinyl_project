@@ -18,14 +18,14 @@ import bcrypt from 'bcryptjs'
 
 
 
-const url = DBUrl
+const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl'
 const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise,
   // useMongoClient: true
 }
 
-mongoose.connect(process.env.url || 'mongodb://localhost/vinyls_db', options)
+mongoose.connect(url || localUrl, options)
 let db=mongoose.connection
 // check Db connection
 mongoose.connection.on('connected', () =>
