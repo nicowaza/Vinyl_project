@@ -79,9 +79,9 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
   vinyl.description = req.body.description
   vinyl.author = req.user._id /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
   vinyl.cover = req.body.cover
-  vinyl.coverId=req.body.coverId
-  
-  req.body.cover= result.secure_url
+  vinyl.coverId = req.body.coverId
+
+  req.body.cover= "truc"
   req.body.coverId= result.public_id
 
 
