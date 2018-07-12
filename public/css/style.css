@@ -13,10 +13,13 @@ body {
   color: #E30202;
 }
 .nav-link, .navbar-brand{
-  font-family: 'Sounds Eroded';
   font-weight: bold;
   font-size: 1.2rem;
   color: #E30202;
+  @font-face{
+    font-family: 'Sounds Eroded',
+    src:url("./font/Sound Eroded.ttf") format("ttf");
+  };
 }
 
 a:hover {
@@ -27,9 +30,12 @@ a:hover {
 display: block;
 margin-top: 6rem;
 color: #E30202;
-font-family: 'Sounds Eroded';
 font-size: 1.8em;
 text-decoration: none;
+@font-face{
+  font-family: 'Sounds Eroded',
+  src:url("./font/Sound Eroded.ttf") format("ttf");
+};
 }
 
 .card-overlay{
@@ -82,8 +88,11 @@ text-decoration: none;
   color: #E30202;
   margin-top: 3%;
   text-align: center;
-  font-family: 'The Juke Box';
   font-size: 6vw;
+  @font-face{
+    font-family: 'The Juke Box',
+    src:url("./font/The_Juke_Box-FFP.ttf") format("ttf");
+  };
 }
 .container-home{
   height: 60vh;
@@ -93,8 +102,11 @@ text-decoration: none;
   margin-top: 20%;
   align-content: center;
   text-align: center;
-  font-family: 'The Juke Box';
   font-size: 10vw;
+  @font-face{
+    font-family: 'The Juke Box',
+    src:url("./font/The_Juke_Box-FFP.ttf") format("ttf");
+  };
 }
 .container-home{
   margin-top: 20%;
