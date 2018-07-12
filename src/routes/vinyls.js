@@ -121,7 +121,7 @@ vinylRouter.get('/user/:id', (req, res) => {
     })
   });
 });
-
+ 
 // Formulaire Edit
 vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Vinyl.findById(req.params.id, (err, vinyl) => {
