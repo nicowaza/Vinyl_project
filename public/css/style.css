@@ -15,7 +15,7 @@ body {
 
 @font-face{
   font-family: 'Sounds Eroded';
-  src:url("./font/Sound Eroded.ttf") format("ttf");
+  src:url("/css/font/Sound Eroded.ttf");
 }
 
 .nav-link, .navbar-brand{
@@ -89,7 +89,7 @@ font-family: 'Sounds Eroded';
 
 @font-face{
   font-family: 'The Juke Box';
-  src:url("./font/The_Juke_Box-FFP.ttf") format("ttf");
+  src:url("/css/font/The_Juke_Box-FFP.ttf");
 }
 
 .singlepage-title {
