@@ -14,15 +14,16 @@ body {
 }
 
 @font-face{
-  font-family: 'Sounds Eroded';
-  src:url("/css/font/Sounds Eroded.ttf");
+  font-family: 'BackstagePassNF';
+  src:url("/css/font/BackstagePassNF.ttf"),
+      url("/css/font/BackstagePassNF.otf");
 }
 
 .nav-link, .navbar-brand{
   font-weight: bold;
   font-size: 1.2rem;
   color: #E30202;
-  font-family: 'Sounds Eroded';
+  font-family: 'BackstagePassNF';
 }
 
 a:hover {
@@ -37,7 +38,7 @@ margin-top: 6rem;
 color: #E30202;
 font-size: 1.8em;
 text-decoration: none;
-font-family: 'Sounds Eroded';
+font-family:'BackstagePassNF';
 
 }
 
