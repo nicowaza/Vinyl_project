@@ -185,7 +185,7 @@ vinylRouter.post('/user/edit/:id', upload.single('cover'), function(req, res){
 // })
 
 vinylRouter.post('/user/delete/:id', function(req, res){
-  vinyl.findById(req.params.id, async function(err, vinyl){
+  Vinyl.findById(req.params.id, async function(err, vinyl){
     if(err){
       req.flash('danger','Oops something went wrong')
       res.redirect('/vinyls/user/edit/:id')

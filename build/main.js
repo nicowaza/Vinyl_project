@@ -787,7 +787,7 @@ vinylRouter.post('/user/edit/:id', upload.single('cover'), function (req, res) {
 // })
 
 vinylRouter.post('/user/delete/:id', function (req, res) {
-  vinyl.findById(req.params.id, (() => {
+  __WEBPACK_IMPORTED_MODULE_2__models_vinyl__["a" /* Vinyl */].findById(req.params.id, (() => {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2(err, vinyl) {
       return __WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
