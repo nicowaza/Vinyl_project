@@ -21,7 +21,7 @@ body {
 
 .nav-link, .navbar-brand{
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #E30202;
   font-family: 'BackstagePassNF';
 }
@@ -36,7 +36,7 @@ a:hover {
 display: block;
 margin-top: 6rem;
 color: #E30202;
-font-size: 1.8em;
+font-size: 2em;
 text-decoration: none;
 font-family:'BackstagePassNF';
 
@@ -109,7 +109,7 @@ font-family:'BackstagePassNF';
   align-content: center;
   text-align: center;
   font-size: 10vw;
-  font-family: 'The Juke Box';
+  font-family: 'BackstagePassNF';
 }
 .container-home{
   margin-top: 20%;
