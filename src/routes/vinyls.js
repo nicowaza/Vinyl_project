@@ -121,7 +121,7 @@ vinylRouter.get('/user/:id', (req, res) => {
     })
   });
 });
- 
+
 // Formulaire Edit
 vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Vinyl.findById(req.params.id, (err, vinyl) => {
@@ -136,28 +136,53 @@ vinylRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
 });
 
 // Update Single Vinyl
-vinylRouter.post('/user/edit/:id', upload.single('cover'), (req, res) => {
+vinylRouter.post('/user/edit/:id', upload.single('cover'), function(req, res){
+  Vinyl.findById(req.params.id, async function(err, vinyl){
+    if(err){
+      req.flash('danger', 'Something went wrong')
+      res.redirect('/vinyls/user/edit/:id')
+      console.log(err)
+    } else {
+      if(req.file){
+        try{
+          await cloudinary.v2.uploader.destroy(vinyl.coverId);
+          let result = await cloudinary.v2.uploader.upload(req.file.path);
+          let secUrl = result.secure_url
+          vinyl.cover = secUrl
+          vinyl.coverId= result.public_id
+        } catch(err){
+          req.flash('danger','Something went wrong')
+          res.redirect('/vinyls/user/edit/:id')
+          console.log(err)
+      }
+    }
+            vinyl.title = req.body.title
+            vinyl.artist = req.body.artist
+            vinyl.release = req.body.release
+            vinyl.format = req.body.format
+            vinyl.description = req.body.description
+            vinyl.save()
+            req.flash('success', 'Vinyl updated')
+            res.redirect('/vinyls/user')
+          }
+        })
+    })
 
-  let vinyl = req.body
-
-if(req.file){
- vinyl.cover=req.file.filename
-}
- else{
-   vinyl.cover="no cover"
- }
-
-  let query = {_id:req.params.id};
-
-  Vinyl.update(query, vinyl, (err) => { /*ici on update le modèle du vinyl au lieu de sauver un objet*/
-  if(err){
-    console.log(err)
-  } else {
-    req.flash('success', 'Vinyl updated')
-    res.redirect('/vinyls/user')
-  }
-  })
-})
+//   let vinyl = req.body
+//
+//
+//
+//   let query = {_id:req.params.id};
+//
+//   Vinyl.update(query, vinyl, (err) => { /*ici on update le modèle du vinyl au lieu de sauver un objet*/
+//   if(err){
+//     console.log(err)
+//   } else {
+//     req.flash('success', 'Vinyl updated')
+//     res.redirect('/vinyls/user')
+//   }
+//   })
+// })
 
 vinylRouter.post('/user/delete/:id', (req, res) => {
 
