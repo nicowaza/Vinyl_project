@@ -6,7 +6,7 @@ html
   body
     nav.navbar.navbar-custom.navbar-expand-lg
       .container  
-        a.navbar-brand(href='/' style='color: #E30202') Vinylapalooza
+        a.navbar-brand(href='/') Vinylapalooza
         button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
           span.navbar-toggler-icon
         #navbarSupportedContent.collapse.navbar-collapse
@@ -15,19 +15,19 @@ html
               li.nav-item
                 a.nav-link(href='/vinyls/' style='color: #E30202') Collections
               li.nav-item
-                a.nav-link(href='/vinyls/user' style='color: #E30202') #{user.username}'s Collection 
+                a.nav-link(href='/vinyls/user') #{user.username}'s Collection 
                   span.sr-only (current)
               li.nav-item
-                a.nav-link(href='/vinyls/add_vinyls' style='color: #E30202') Add Vinyl
+                a.nav-link(href='/vinyls/add_vinyls') Add Vinyl
           ul.navbar-nav.ml-auto
             if user
               li 
-                a.nav-link(href='/users/logout' style='color: #E30202') Logout  
+                a.nav-link(href='/users/logout') Logout  
             else 
               li
-                a.nav-link(href='/users/register' style='color: #E30202') Register
+                a.nav-link(href='/users/register') Register
               li
-                a.nav-link(href='/users/login' style='color: #E30202') Login
+                a.nav-link(href='/users/login') Login
                
     
 
