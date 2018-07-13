@@ -184,18 +184,36 @@ vinylRouter.post('/user/edit/:id', upload.single('cover'), function(req, res){
 //   })
 // })
 
-vinylRouter.post('/user/delete/:id', (req, res) => {
-
-  Vinyl.remove({_id:req.params.id}, (err) => {
+vinylRouter.post('/user/delete/:id', function(req, res){
+  vinyl.findById(req.params.id, async function(err, vinyl){
     if(err){
-      console.log('ok')
-
-    } else {
+      req.flash('danger','Oops something went wrong')
+      res.redirect('/vinyls/user/edit/:id')
+    }
+    try {
+      await cloudinary.v2.uploader.destroy(vinyl.coverId);
+      vinyl.remove()
       req.flash('success', 'Vinyl deleted')
       res.redirect('/vinyls/user')
+    }catch(err){
+      if(err){
+        req.flash('danger','Oops something went wrong')
+        res.redirect('/vinyls/user/edit/:id')
+      }
     }
-    })
+  })
 })
+
+//   Vinyl.remove({_id:req.params.id}, (err) => {
+//     if(err){
+//       console.log('ok')
+//
+//     } else {
+//       req.flash('success', 'Vinyl deleted')
+//       res.redirect('/vinyls/user')
+//     }
+//     })
+// })
 
 // route User Collection
 vinylRouter.get('/user', ensureAuthenticated, (req, res) => {

@@ -786,17 +786,59 @@ vinylRouter.post('/user/edit/:id', upload.single('cover'), function (req, res) {
 //   })
 // })
 
-vinylRouter.post('/user/delete/:id', (req, res) => {
+vinylRouter.post('/user/delete/:id', function (req, res) {
+  vinyl.findById(req.params.id, (() => {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2(err, vinyl) {
+      return __WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (err) {
+              req.flash('danger', 'Oops something went wrong');
+              res.redirect('/vinyls/user/edit/:id');
+            }
+            _context2.prev = 1;
+            _context2.next = 4;
+            return __WEBPACK_IMPORTED_MODULE_5_cloudinary___default.a.v2.uploader.destroy(vinyl.coverId);
 
-  __WEBPACK_IMPORTED_MODULE_2__models_vinyl__["a" /* Vinyl */].remove({ _id: req.params.id }, err => {
-    if (err) {
-      console.log('ok');
-    } else {
-      req.flash('success', 'Vinyl deleted');
-      res.redirect('/vinyls/user');
-    }
-  });
+          case 4:
+            vinyl.remove();
+            req.flash('success', 'Vinyl deleted');
+            res.redirect('/vinyls/user');
+            _context2.next = 12;
+            break;
+
+          case 9:
+            _context2.prev = 9;
+            _context2.t0 = _context2['catch'](1);
+
+            if (_context2.t0) {
+              req.flash('danger', 'Oops something went wrong');
+              res.redirect('/vinyls/user/edit/:id');
+            }
+
+          case 12:
+          case 'end':
+            return _context2.stop();
+        }
+      }, _callee2, this, [[1, 9]]);
+    }));
+
+    return function (_x3, _x4) {
+      return _ref2.apply(this, arguments);
+    };
+  })());
 });
+
+//   Vinyl.remove({_id:req.params.id}, (err) => {
+//     if(err){
+//       console.log('ok')
+//
+//     } else {
+//       req.flash('success', 'Vinyl deleted')
+//       res.redirect('/vinyls/user')
+//     }
+//     })
+// })
 
 // route User Collection
 vinylRouter.get('/user', ensureAuthenticated, (req, res) => {
