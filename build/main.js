@@ -256,28 +256,31 @@ __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.config({
 });
 
 // register process
-userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
-  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, result => {
+userRouter.post("/register", upload.single('avatar'), function (req, res, next) {
+  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, function (err, result) {
+    if (err) console.log(err);
+
+    let secUrl = result.secure_url;
     let user = new __WEBPACK_IMPORTED_MODULE_2__models_user__["a" /* User */]();
     user.name = req.body.name;
     user.username = req.body.username;
     user.email = req.body.email;
     user.password = req.body.password;
-    user.avatar = result.secure_url;
+    user.avatar = secUrl;
     user.avatarId = result.public_id;
-  });
 
-  user.save((err, user) => {
-    if (err) {
-      console.log(err);
-      req.flash('danger', 'Oops something went wrong');
-      res.redirect('/users/register');
-    } else {
-      console.log(user);
-      req.session.userId = user._id;
-      req.flash('success', `'User ${user.username} created'`); /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-      res.redirect('/users/login');
-    }
+    user.save(function (err, user) {
+      if (err) {
+        console.log(err);
+        req.flash('danger', 'Oops something went wrong');
+        res.redirect('/users/register');
+      } else {
+        console.log(user);
+        req.session.userId = user._id;
+        req.flash('success', `'User ${user.username} created'`); /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+        res.redirect('/users/login');
+      }
+    });
   });
 });
 
@@ -385,14 +388,14 @@ const passport = __webpack_require__(11);
 const LocalStrategy = __webpack_require__(20).Strategy;
 
 
-const url = DBUrl;
+const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl';
 const localUrl = 'mongodb://localhost/vinyls_db';
 const options = {
   promiseLibrary: Promise
   // useMongoClient: true
 };
 
-__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(process.env.url || 'mongodb://localhost/vinyls_db', options);
+__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(url || localUrl, options);
 let db = __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection;
 // check Db connection
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
@@ -567,6 +570,15 @@ const vinylRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 //création de l'espace de storage pour les files uploaded dans les formulaires add et edit
 
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    req.flash('danger', 'Please login');
+    res.redirect('/users/login');
+  }
+}
 //MULTER SET UP
 // storage
 const storage = __WEBPACK_IMPORTED_MODULE_3_multer___default.a.diskStorage({
@@ -609,20 +621,11 @@ __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    req.flash('danger', 'Please login');
-    res.redirect('/users/login');
-  }
-}
-
 //Add submit POST route
-vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (req, res) => {
-  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, result => {
-    console.log(req.body);
-    console.log(req.file.path);
+vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), function (req, res, next) {
+  __WEBPACK_IMPORTED_MODULE_4_cloudinary___default.a.v2.uploader.upload(req.file.path, function (err, result) {
+    if (err) console.log(err);
+    let secUrl = result.secure_url;
 
     let vinyl = new __WEBPACK_IMPORTED_MODULE_1__models_vinyl__["a" /* Vinyl */]();
     vinyl.title = req.body.title;
@@ -631,23 +634,25 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), (re
     vinyl.format = req.body.format;
     vinyl.description = req.body.description;
     vinyl.author = req.user._id; /*ici on inscrit l'id du user qui est logué dans le vinyl que l'ont enregistre dans la base de données*/
-
-    vinyl.cover = result.secure_url;
+    vinyl.cover = secUrl;
     vinyl.coverId = result.public_id;
-  });
-  //AUTRE METHODE
-  // const datas = req.body
-  // datas['cover'] = req.file
 
-  vinyl.save((err, vinyl) => {
-    if (err) {
-      req.flash('danger', 'Oops something went wrong');
-      res.redirect('/add_vinyls');
-    } else {
-      console.log(vinyl);
-      req.flash('success', `'${vinyl.title} added'`); /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-      res.redirect('/vinyls/user');
-    }
+    console.log(req.body);
+    console.log(req.file.path);
+    //AUTRE METHODE
+    // const datas = req.body
+    // datas['cover'] = req.file
+
+    vinyl.save((err, vinyl) => {
+      if (err) {
+        req.flash('danger', 'Oops something went wrong');
+        res.redirect('/add_vinyls');
+      } else {
+        console.log(vinyl);
+        req.flash('success', `'${vinyl.title} added'`); /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+        res.redirect('/vinyls/user');
+      }
+    });
   });
 });
 // display add_vinyl route
