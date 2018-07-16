@@ -3,6 +3,7 @@ const userRouter = express.Router()
 import mongoose from 'mongoose'
 import { User } from '../models/user'
 import multer from 'multer'
+import cloudinary from 'cloudinary'
 import path from 'path'
 import passport from 'passport'
 import expressValidator from 'express-validator'
@@ -12,33 +13,55 @@ import bcrypt from 'bcryptjs'
 
 
 import bodyParser from 'body-parser'
-//création de l'espace de storage pour les files uploaded dans les formulaires add et edit
+//MULTER SET UP
+// storage
 const storage = multer.diskStorage({
   destination : (req, file, cb) => {
-    cb(null, './public/uploads/users')
+    cb(null, './public/uploads/')
   },
   filename : (req, file, cb) => {
-    cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
+    cb(null, Date.now() + '-' + file.originalname)
   }
 })
 
-const upload = multer({
-  storage: storage})
+// filtre
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
 
+// multer upload setup
+const upload = multer({
+  storage: storage,
+  fileFilter: imageFilter
+})
+
+// CLOUDINARY SETUP
+cloudinary.config({
+  cloud_name: 'nicowaza',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 // register process
-userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
-  let user = new User(req.body)
+userRouter.post("/register", upload.single('avatar'), function(req, res, next){ cloudinary.v2.uploader.upload(req.file.path,
+  function(err,result) {
+    if (err) console.log(err)
 
-    if(req.file){
-      console.log('uploading')
-      user.avatar=req.file.filename
-    }
-      else{
-        user.avatar="no avatar"
-      }
+    let secUrl = result.secure_url
+    let user = new User()
+    user.name = req.body.name
+    user.username = req.body.username
+    user.email = req.body.email
+    user.password = req.body.password
+    user.avatar= secUrl
+    user.avatarId= result.public_id
 
-    user.save((err, user) => {
+
+  user.save(function(err, user){
       if(err){
         console.log(err)
         req.flash('danger', 'Oops something went wrong')
@@ -49,8 +72,8 @@ userRouter.post("/register", upload.single('avatar'), (req, res, next) => {
         req.flash('success', `'User ${user.username} created'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
         res.redirect('/users/login')
       }
+      })
     })
-
   })
 
 userRouter.get("/register", (req, res) => {

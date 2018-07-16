@@ -5,18 +5,54 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  box-sizing: border-box;
 
 }
 
+@font-face{
+  font-family: 'BackstagePassNF';
+  src:url("/css/font/BackstagePassNF.ttf"),
+      url("/css/font/BackstagePassNF.otf");
+}
+
+@font-face{
+  font-family: 'KEEPT___';
+  src:url("/css/font/KEEPT___.TTF");
+}
+
+@font-face{
+  font-family: 'The Juke Box';
+  src:url("/css/font/The_Juke_Box-FFP.ttf");
+}
+
+.navbar-custom {
+  background: transparent;
+/*rgba(52, 58, 64, .7);*/
+}
+
+/* change navbar-toggler inside lines color (stroke) */
+.navbar-custom span.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(91, 92, 84)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+  color: rgb(91, 92, 84);
+}
+
+/* change hamburger button background and border color */
+ button.navbar-toggler{
+  background-color: rgba(52, 58, 64, .7);
+  border-color: rgb(91, 92, 84)
+}
 
 .navbar-brand{
-  color: #E30202;
+  font-size: 2.1rem;
 }
+
+.nav-link{
+  font-size: 1.9rem;
+}
+
 .nav-link, .navbar-brand{
-  font-family: 'Sounds Eroded';
-  font-weight: bold;
-  font-size: 1.2rem;
   color: #E30202;
+  font-family: 'KEEPT___';
 }
 
 a:hover {
@@ -24,12 +60,12 @@ a:hover {
 }
 
 .card-title-overlay a{
-display: block;
-margin-top: 6rem;
-color: #E30202;
-font-family: 'Sounds Eroded';
-font-size: 1.8em;
-text-decoration: none;
+  display: block;
+  margin-top: 6rem;
+  color: #E30202;
+  font-size: 2em;
+  text-decoration: none;
+  font-family:'BackstagePassNF';
 }
 
 .card-overlay{
@@ -52,19 +88,14 @@ text-decoration: none;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  }
+}
 
-  .card-title-overlay:hover {
-      opacity:1;
-  }
+.card-title-overlay:hover {
+  opacity:1;
+}
 
-
-  .card-overlay img {
-      z-index:1;
-  }
-
-.navbar-brand{
-  font-size: 1.5rem;
+.card-overlay img {
+  z-index:1;
 }
 
 .jumbotron {
@@ -82,23 +113,26 @@ text-decoration: none;
   color: #E30202;
   margin-top: 3%;
   text-align: center;
-  font-family: 'The Juke Box';
   font-size: 6vw;
+  min-width: 3vw;
+  font-family: 'The Juke Box';
 }
+
 .container-home{
+  margin-top: 15%;
   height: 60vh;
+  text-align: center;
 }
+
 .homepage-title{
   color: #E30202;
   margin-top: 20%;
   align-content: center;
   text-align: center;
+  font-size: 15vw;
   font-family: 'The Juke Box';
-  font-size: 10vw;
 }
-.container-home{
-  margin-top: 20%;
-}
+
 .alert-error {
   color: #a94442;
   background-color: #f2dede;

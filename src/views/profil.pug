@@ -8,7 +8,7 @@ block content
       .card-deck
         .card.card-overlay.shadow.p-3.mb-5.bg-white.rounded.mb-5(style='width: 20rem;')
           - var img = vinyl.cover
-          img(src='/uploads/'+ img, alt='Card image cap').card-img-top
+          img(src=img, alt='Card image cap').card-img-top
           .card-body.card-title-overlay
             a(href="/vinyls/user/"+vinyl._id).card-title= vinyl.title
           //- ul.list-group.list-group-flush
