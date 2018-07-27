@@ -388,7 +388,7 @@ const passport = __webpack_require__(11);
 const LocalStrategy = __webpack_require__(23).Strategy;
 
 
-const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl';
+const url = DBUrl;
 // const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise
