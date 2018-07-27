@@ -218,7 +218,7 @@ const userRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 
 
-const { check, validationResult } = __webpack_require__(19);
+const { check, validationResult } = __webpack_require__(22);
 
 
 
@@ -371,10 +371,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_bcryptjs__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_bcryptjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_bcryptjs__);
 
-const { SERVER_PORT, DBUrl } = process.env;
 const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 
+const { SERVER_PORT, DBUrl } = process.env;
 
 
 
@@ -385,17 +385,17 @@ const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 
 const passport = __webpack_require__(11);
-const LocalStrategy = __webpack_require__(20).Strategy;
+const LocalStrategy = __webpack_require__(23).Strategy;
 
 
-const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl';
-const localUrl = 'mongodb://localhost/vinyls_db';
+const url = DBUrl;
+// const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise
   // useMongoClient: true
 };
 
-__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(url || localUrl, options);
+__WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connect(url, options);
 let db = __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection;
 // check Db connection
 __WEBPACK_IMPORTED_MODULE_10_mongoose___default.a.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
@@ -423,7 +423,7 @@ app.use(__WEBPACK_IMPORTED_MODULE_6_express_session___default()({
 //express messages middleware
 app.use(__webpack_require__(7)());
 app.use(function (req, res, next) {
-  res.locals.messages = __webpack_require__(21)(req, res);
+  res.locals.messages = __webpack_require__(24)(req, res);
   next();
 });
 
@@ -518,7 +518,7 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT);
-app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${process.env.PORT}`));
+app.listen(process.env.PORT, () => console.log(`[Express] is running on ${process.env.PORT}`));
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src"))
 
 /***/ }),
@@ -545,11 +545,11 @@ module.exports = require("express-session");
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return vinylRouter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__home_simplonco_Bureau_Projets_Exos_Udemy_Node_Express_Vinylapalooza_node_modules_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_express__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_express__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_vinyl__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_vinyl__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_user__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_multer__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_multer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_multer__);
@@ -867,59 +867,13 @@ vinylRouter.get('/', ensureAuthenticated, (req, res) => {
 
 /***/ }),
 /* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Vinyl; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
-
-
-const Schema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema;
-
-const VinylSchema = new Schema({
-  title: { type: String },
-  artist: { type: String, index: true },
-  release: { type: String },
-  format: { type: String },
-  description: { type: String },
-  coverId: { type: String },
-  cover: { type: String },
-  author: { type: String }
-
-});
-
-const Vinyl = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model("Vinyl", VinylSchema);
-
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports) {
-
-module.exports = require("express-validator/check");
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = require("passport-local");
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = require("express-messages");
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(23);
-
-
-/***/ }),
-/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -944,7 +898,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(24);
+module.exports = __webpack_require__(20);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -960,7 +914,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 24 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /**
@@ -1691,6 +1645,52 @@ if (hadRuntime) {
   (function() { return this })() || Function("return this")()
 );
 
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Vinyl; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
+
+
+const Schema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema;
+
+const VinylSchema = new Schema({
+  title: { type: String },
+  artist: { type: String, index: true },
+  release: { type: String },
+  format: { type: String },
+  description: { type: String },
+  coverId: { type: String },
+  cover: { type: String },
+  author: { type: String }
+
+});
+
+const Vinyl = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model("Vinyl", VinylSchema);
+
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-validator/check");
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+module.exports = require("passport-local");
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-messages");
 
 /***/ })
 /******/ ]);

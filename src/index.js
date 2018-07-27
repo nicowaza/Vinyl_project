@@ -1,8 +1,8 @@
 import express from 'express'
-const { SERVER_PORT, DBUrl } = process.env
 const app = express()
 import bodyParser from 'body-parser'
 import "dotenv/config"
+const { SERVER_PORT, DBUrl } = process.env
 import volleyball from 'volleyball'
 import expressValidator from 'express-validator'
 import flash from 'connect-flash'
@@ -18,14 +18,14 @@ import bcrypt from 'bcryptjs'
 
 
 
-const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl'
-const localUrl = 'mongodb://localhost/vinyls_db'
+const url = DBUrl
+// const localUrl = 'mongodb://localhost/vinyls_db'
 const options = {
   promiseLibrary: Promise,
   // useMongoClient: true
 }
 
-mongoose.connect(url || localUrl, options)
+mongoose.connect(url, options)
 let db=mongoose.connection
 // check Db connection
 mongoose.connection.on('connected', () =>
@@ -152,4 +152,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 console.log(process.env.PORT)
-app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${process.env.PORT}`))
+app.listen( process.env.PORT, () => console.log(`[Express] is running on ${process.env.PORT}`))
