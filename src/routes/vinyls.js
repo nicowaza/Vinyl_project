@@ -6,10 +6,7 @@ import multer from 'multer'
 import cloudinary from 'cloudinary'
 import path from 'path'
 import { userRouter } from './users'
-
 import bodyParser from 'body-parser'
-
-
 
 //MULTER SET UP
 // storage

@@ -108,43 +108,5 @@ app.get('/', (req, res) => {
   res.render('home')
 })
 
-// app.get('/', (req, res) => {
-//   let articles = [
-//     {
-//       id: 1,
-//       title:'Article 1',
-//       author: 'Nico',
-//       body:'this is article one'
-//     },
-//     {
-//       id: 2,
-//       title:'Article 2',
-//       author: 'jojo',
-//       body:'this is article two'
-//     },
-//     {
-//       id: 3,
-//       title:'Article 3',
-//       author: 'Bobo',
-//       body:'this is article three'
-//     },
-//     {
-//       id: 4,
-//       title:'Article 4',
-//       author: 'Jo',
-//       body:'this is article four'
-//     },
-//   ]
-//   res.render('home', /*dans le render on met le nom du fichier pug dans lequel on va rendre les données. On ajoute alors un objet qui contient la clé de ce que l'on renvoie dans pug et la valeur qui y fait référence*/
-//    {
-//     title: 'Articles', /*ici on appelera la clé title dans pug et pug affichera la valeur Article*/
-//     articles:articles /*ici on appelera la clé articles dans pug et celle ci renverra la valeur articles qui est un array. Il faudra introduire dans pug un loop pour naviguer dans l'array*/
-//   })
-// })
-
-// app.get('/friends', (req, res) => {
-//   const friends = ["tony", "miranda", "jojo", "pierre", "basil"]
-//   res.render('friends', {friends: friends});
-// })
 
 app.listen( port, () => console.log(`[Express] is running on ${port}`))
