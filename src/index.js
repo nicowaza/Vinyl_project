@@ -51,6 +51,7 @@ console.log('Connecté a MongoDB !')
 // })
 
 
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
 
@@ -165,4 +166,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 
-app.listen( port, () => console.log(`[Express] is running on ${PORT}`))
+app.listen( port, () => console.log(`[Express] is running on ${port}`))
