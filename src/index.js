@@ -19,19 +19,19 @@ import bcrypt from 'bcryptjs'
 
 
 const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl'
-const localUrl = 'mongodb://localhost/vinyls_db'
+// pb with the heroku deployement. Can't access the database when the DBUrl is written in the .env file...Pb still has to be fixed
+
 const options = {
   promiseLibrary: Promise,
   // useMongoClient: true
 }
 
-mongoose.connect(url || localUrl, options)
+mongoose.connect(url, options)
 let db=mongoose.connection
 // check Db connection
 mongoose.connection.on('connected', () =>
-console.log('[MongoDB] is running on port 27017')
+console.log('[MongoDB] is running')
 )
-
 //check for Db errors
 db.on('error', (err) => {
   console.log(err)
@@ -67,8 +67,8 @@ app.use(passport.session())
 app.get('*', (req, res, next) => {
   res.locals.user = req.user || null
   next()
-}) /*set une variable globale user que l'on pourra utiliser dans tous le projet*/
-/*next() apl le prochain middleware*/
+}) /*set a global user variable to be used in the rest of the project*/
+/*next() calls the next middleware*/
 
 passport.serializeUser((user,done) => {
   done(null, user.id)
@@ -81,7 +81,7 @@ passport.deserializeUser((id,done) => {
 
 passport.use(new LocalStrategy(
   function(username, password, done){
-    User.findOne({ username: username },/*ce qu'on veut comparer*/ function(err, user){
+    User.findOne({ username: username },/*what we want to compare*/ function(err, user){
       if(err) { return done(err); }
       if(!user){
         return done(null, false, { message: 'No user found.' });
@@ -105,7 +105,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 app.use('/users', userRouter)
-// app.use('/vinyls', vinylRouter)
 app.use('/vinyls', vinylRouter)
 
 app.get('/', (req, res) => {
@@ -113,43 +112,6 @@ app.get('/', (req, res) => {
   res.render('home')
 })
 
-// app.get('/', (req, res) => {
-//   let articles = [
-//     {
-//       id: 1,
-//       title:'Article 1',
-//       author: 'Nico',
-//       body:'this is article one'
-//     },
-//     {
-//       id: 2,
-//       title:'Article 2',
-//       author: 'jojo',
-//       body:'this is article two'
-//     },
-//     {
-//       id: 3,
-//       title:'Article 3',
-//       author: 'Bobo',
-//       body:'this is article three'
-//     },
-//     {
-//       id: 4,
-//       title:'Article 4',
-//       author: 'Jo',
-//       body:'this is article four'
-//     },
-//   ]
-//   res.render('home', /*dans le render on met le nom du fichier pug dans lequel on va rendre les données. On ajoute alors un objet qui contient la clé de ce que l'on renvoie dans pug et la valeur qui y fait référence*/
-//    {
-//     title: 'Articles', /*ici on appelera la clé title dans pug et pug affichera la valeur Article*/
-//     articles:articles /*ici on appelera la clé articles dans pug et celle ci renverra la valeur articles qui est un array. Il faudra introduire dans pug un loop pour naviguer dans l'array*/
-//   })
-// })
 
-// app.get('/friends', (req, res) => {
-//   const friends = ["tony", "miranda", "jojo", "pierre", "basil"]
-//   res.render('friends', {friends: friends});
-// })
 console.log(process.env.PORT)
 app.listen(process.env.PORT || SERVER_PORT, () => console.log(`[Express] is running on ${process.env.PORT}`))
