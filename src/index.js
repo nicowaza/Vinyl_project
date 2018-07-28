@@ -18,24 +18,17 @@ import bcrypt from 'bcryptjs'
 
 
 
-const url = 'mongodb://NicolasD:foxylady1480!@ds227570.mlab.com:27570/vinyl'
-const localUrl = 'mongodb://localhost/vinyls_db'
-const options = {
-  promiseLibrary: Promise,
-  // useMongoClient: true
-}
+mongoose.Promise = global.Promise;
 
-mongoose.connect(url || localUrl, options)
-let db=mongoose.connection
-// check Db connection
-mongoose.connection.on('connected', () =>
-console.log('[MongoDB] is running on port 27017')
-)
+mongoose.connect((DBUrl), { useNewUrlParser: true})
 
-//check for Db errors
-db.on('error', (err) => {
-  console.log(err)
-})
+let db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function () {
+console.log('Connecté a MongoDB !')
+});
 
 
 app.use(bodyParser.json())
