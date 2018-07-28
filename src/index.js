@@ -16,7 +16,8 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 import bcrypt from 'bcryptjs'
 
-
+const port = process.env.PORT
+console.log(port)
 
 const url = DBUrl
 // const localUrl = 'mongodb://localhost/vinyls_db'
@@ -29,7 +30,7 @@ mongoose.connect(url, options)
 let db=mongoose.connection
 // check Db connection
 mongoose.connection.on('connected', () =>
-console.log('[MongoDB] is running on port 27017')
+console.log('[MongoDB] is running')
 )
 
 //check for Db errors
@@ -151,5 +152,5 @@ app.get('/', (req, res) => {
 //   const friends = ["tony", "miranda", "jojo", "pierre", "basil"]
 //   res.render('friends', {friends: friends});
 // })
-console.log(process.env.PORT)
-app.listen( process.env.PORT, () => console.log(`[Express] is running on ${process.env.PORT}`))
+
+app.listen( port, () => console.log(`[Express] is running on ${port}`))
