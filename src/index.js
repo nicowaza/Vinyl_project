@@ -19,24 +19,36 @@ import bcrypt from 'bcryptjs'
 const port = process.env.PORT
 console.log(port)
 
-const url = DBUrl
+// const url = DBUrl
+mongoose.Promise = global.Promise;
+
+mongoose.connect((DBUrl), { useNewUrlParser: true})
+
+let db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function () {
+console.log('Connecté a MongoDB !')
+});
+
 // const localUrl = 'mongodb://localhost/vinyls_db'
-const options = {
-  promiseLibrary: Promise,
-  // useMongoClient: true
-}
-
-mongoose.connect(url, options)
-let db=mongoose.connection
-// check Db connection
-mongoose.connection.on('connected', () =>
-console.log('[MongoDB] is running')
-)
-
-//check for Db errors
-db.on('error', (err) => {
-  console.log(err)
-})
+// const options = {
+//   promiseLibrary: Promise,
+//   // useMongoClient: true
+// }
+//
+// mongoose.connect(url, options)
+// let db=mongoose.connection
+// // check Db connection
+// mongoose.connection.on('connected', () =>
+// console.log('[MongoDB] is running')
+// )
+//
+// //check for Db errors
+// db.on('error', (err) => {
+//   console.log(err)
+// })
 
 
 app.use(bodyParser.json())
@@ -153,4 +165,4 @@ app.get('/', (req, res) => {
 //   res.render('friends', {friends: friends});
 // })
 
-app.listen( port, () => console.log(`[Express] is running on ${port}`))
+app.listen( port, () => console.log(`[Express] is running on ${PORT}`))
