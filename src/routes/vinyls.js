@@ -46,23 +46,12 @@ const upload = multer({
   fileFilter: imageFilter
 }) /*on récupère la variable storage qui défini l'espace de stockage et on utilise la variable imageFilter pour ne prendre que des images en upload*/
 
-//on crée un Router pour toutes les routes ayant a trait aux vinyls
-
-// vinylRouter.get('/', /*cette route '/' correspond à '/vinyls' puisqu'on se trouve déjà dans la route vinyls*/ (req,res) => {
-//   // Vinyl.find({},(err,vinyls)=> {
-// //   //   if (err) res.send(err)
-// //   //     res.render("allvinyls")
-// //   })
-// // }
-// Acces Control
 // CLOUDINARY SETUP
 cloudinary.config({
   cloud_name: 'nicowaza',
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
-
-
 
 //Add submit POST route
 vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), function(req, res, next){
@@ -81,24 +70,18 @@ vinylRouter.post('/add_vinyls', ensureAuthenticated, upload.single('cover'), fun
       vinyl.cover = secUrl
       vinyl.coverId= result.public_id
 
-        console.log(req.body)
-        console.log(req.file.path)
-   //AUTRE METHODE
-    // const datas = req.body
-    // datas['cover'] = req.file
-
-  vinyl.save((err, vinyl) => {
-    if(err){
-      req.flash('danger', 'Oops something went wrong')
-      res.redirect('/add_vinyls')
-    } else {
-      console.log(vinyl)
-      req.flash('success', `'${vinyl.title} added'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-      res.redirect('/vinyls/user')
-    }
+      vinyl.save((err, vinyl) => {
+        if(err){
+          req.flash('danger', 'Oops something went wrong')
+          res.redirect('/add_vinyls')
+        } else {
+          console.log(vinyl)
+          req.flash('success', `'${vinyl.title} added'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+          res.redirect('/vinyls/user')
+        }
+      })
+    })
   })
-})
-})
 // display add_vinyl route
 vinylRouter.get('/add_vinyls', ensureAuthenticated, (req, res) => {
 
@@ -116,7 +99,7 @@ vinylRouter.get('/user/:id', (req, res) => {
       res.render('vinyl', {
         vinyl:vinyl,
         author:user.username /*on associe l'author(celui qui a enregistrer l'entrée dans la base de donnée au username du user qui a fait l'entrée)*/
-      });
+        });
       }
     })
   });
@@ -154,35 +137,19 @@ vinylRouter.post('/user/edit/:id', upload.single('cover'), function(req, res){
           req.flash('danger','Something went wrong')
           res.redirect('/vinyls/user/edit/:id')
           console.log(err)
-      }
-    }
-            vinyl.title = req.body.title
-            vinyl.artist = req.body.artist
-            vinyl.release = req.body.release
-            vinyl.format = req.body.format
-            vinyl.description = req.body.description
-            vinyl.save()
-            req.flash('success', 'Vinyl updated')
-            res.redirect('/vinyls/user')
           }
-        })
+      }
+          vinyl.title = req.body.title
+          vinyl.artist = req.body.artist
+          vinyl.release = req.body.release
+          vinyl.format = req.body.format
+          vinyl.description = req.body.description
+          vinyl.save()
+          req.flash('success', 'Vinyl updated')
+          res.redirect('/vinyls/user')
+        }
+      })
     })
-
-//   let vinyl = req.body
-//
-//
-//
-//   let query = {_id:req.params.id};
-//
-//   Vinyl.update(query, vinyl, (err) => { /*ici on update le modèle du vinyl au lieu de sauver un objet*/
-//   if(err){
-//     console.log(err)
-//   } else {
-//     req.flash('success', 'Vinyl updated')
-//     res.redirect('/vinyls/user')
-//   }
-//   })
-// })
 
 vinylRouter.post('/user/delete/:id', function(req, res){
   Vinyl.findById(req.params.id, async function(err, vinyl){
@@ -203,17 +170,6 @@ vinylRouter.post('/user/delete/:id', function(req, res){
     }
   })
 })
-
-//   Vinyl.remove({_id:req.params.id}, (err) => {
-//     if(err){
-//       console.log('ok')
-//
-//     } else {
-//       req.flash('success', 'Vinyl deleted')
-//       res.redirect('/vinyls/user')
-//     }
-//     })
-// })
 
 // route User Collection
 vinylRouter.get('/user', ensureAuthenticated, (req, res) => {

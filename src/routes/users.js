@@ -11,7 +11,6 @@ const { check, validationResult } = require('express-validator/check');
 import bcrypt from 'bcryptjs'
 
 
-
 import bodyParser from 'body-parser'
 //MULTER SET UP
 // storage
@@ -26,11 +25,11 @@ const storage = multer.diskStorage({
 
 // filtre
 const imageFilter = function (req, file, cb) {
-    // accept image files only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
 };
 
 // multer upload setup
@@ -61,17 +60,17 @@ userRouter.post("/register", upload.single('avatar'), function(req, res, next){ 
     user.avatarId= result.public_id
 
 
-  user.save(function(err, user){
-      if(err){
-        console.log(err)
-        req.flash('danger', 'Oops something went wrong')
-        res.redirect('/users/register')
-      } else {
-        console.log(user)
-        req.session.userId = user._id
-        req.flash('success', `'User ${user.username} created'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
-        res.redirect('/users/login')
-      }
+    user.save(function(err, user){
+        if(err){
+          console.log(err)
+          req.flash('danger', 'Oops something went wrong')
+          res.redirect('/users/register')
+        } else {
+          console.log(user)
+          req.session.userId = user._id
+          req.flash('success', `'User ${user.username} created'`) /*on utilise le type success pour la couleur bootstrap et on écrit le message a afficher*/
+          res.redirect('/users/login')
+        }
       })
     })
   })
@@ -88,26 +87,7 @@ userRouter.post('/login', (req, res, next) => {
     failureFlash: true
   })(req, res, next)
 })
-//   if (req.body.username && req.body.password) {
-//     User.authenticate(req.body.username, req.body.password, function(err, user){
-//       if (err || !user){
-//         var err = new Error('Wrong username or password')
-//         err.status = 401
-//         return next(err)
-//       }else {
-//         req.session.userId = user._id
-//         return res.redirect('/vinyls')
-//       }
-//     })
-//
-//   } else {
-//        var err = new Error('Username and password required')
-//        err.status = 401
-//        req.flash('danger', 'Username and password required')
-//        res.redirect('login')
-//        console.log(err)
-//      }
-// })
+
 userRouter.get('/login', (req, res) => {
   res.render('login', {title: 'Login'})
 })
