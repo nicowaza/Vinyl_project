@@ -82,7 +82,6 @@ passport.use(new LocalStrategy(
         return done(null, false, { message: 'No user found.' });
       }
 
-
       // Match password
       bcrypt.compare(password, user.password, function(err, isMatch) {
         if(err) throw err
